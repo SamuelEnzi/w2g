@@ -1,3 +1,5 @@
 w2g.desktop/obj/*
 w2g.desktop/bin/*
 .vs/*
+w2g.core/obj/*
+w2g.core/bin/*
