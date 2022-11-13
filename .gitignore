@@ -3,3 +3,4 @@ w2g.desktop/bin/*
 .vs/*
 w2g.core/obj/*
 w2g.core/bin/*
+w2g.desktop/.vs/*
