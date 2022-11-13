@@ -7,5 +7,24 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <!--<ColumnDefinition/>-->
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <MediaElement x:Name="UI_Video" Grid.ColumnSpan="3" UnloadedBehavior="Manual" LoadedBehavior="Manual">
+            
+        </MediaElement>
+
+        <Button x:Name="UI_Play" Content="Play" Grid.Column="0" Grid.Row="1" Margin="50,10,50,10" Click="UI_Play_Click"/>
+        <Button x:Name="UI_Pause" Content="Pause" Grid.Column="1" Grid.Row="1" Margin="50,10,50,10" Click="UI_Pause_Click"/>
+        <Slider x:Name="UI_Position" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Thumb.DragCompleted="UI_Position_DragCompleted"/>
     </Grid>
 </Window>
