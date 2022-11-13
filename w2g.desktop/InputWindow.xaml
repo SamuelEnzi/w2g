@@ -14,6 +14,5 @@
 
         <TextBox x:Name="UI_Input" Grid.Row="0" Margin="20,10,20,10" TextChanged="UI_Input_TextChanged"/>
         <Button x:Name="UI_Submit" Content="Submit" Grid.Row="1" Margin="20,10,20,10" Click="UI_Submit_Click"/>
-
     </Grid>
 </Window>

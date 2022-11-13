@@ -26,15 +26,27 @@ namespace w2g.desktop
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private double? postition;
+        private double? position;
 
-        public double? PostitionTime { get => postition; set
+        public double? PositionTime { get => position; set
             { 
-                postition = value; 
+                position = value; 
                 NotifyPropertyChanged();
                 UI_Video.Position = TimeSpan.FromSeconds(UI_Position.Value);
             }
         }
+
+        public string Time
+        {
+            get
+            {
+                if (PositionTime == null)
+                    return "00:00:00";
+                var time = TimeSpan.FromSeconds((double)PositionTime!);
+                return time.ToString();
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -62,8 +74,9 @@ namespace w2g.desktop
         {
             if (UI_Position.IsMouseOver)
                 return;
-            postition = UI_Video.Position.TotalSeconds;
-            UI_Position.Value = (double)postition;
+            position = UI_Video.Position.TotalSeconds;
+            UI_Position.Value = (double)position;
+            NotifyPropertyChanged("Time");
         }
 
         private void UI_Play_Click(object sender, RoutedEventArgs e)
@@ -82,7 +95,7 @@ namespace w2g.desktop
 
         private void UI_Position_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            this.PostitionTime = UI_Position.Value;
+            this.PositionTime = UI_Position.Value;
 
         }
     }
