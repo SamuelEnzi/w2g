@@ -19,11 +19,16 @@ void StartClient()
 
     client.SetCurrent += (s, i) => Display(i);
     client.SetTime += (s, i) => Display(i);
-    client.VideoSet += (s, i) => Display(i);
+    client.VideoSet += (s, i) =>
+    {
+        Display(i);
+    };
     client.VideoPlay += (s, i) => Display(i);
     client.VideoStop += (s, i) => Display(i);
 
     client.Connect();
+
+
     Console.WriteLine("client connected to '127.0.0.1:6061'");
     client.RequestCurrent(new CurrentModel());
 }
