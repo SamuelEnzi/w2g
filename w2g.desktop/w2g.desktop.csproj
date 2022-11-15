@@ -8,12 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Ressources\*" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="YoutubeExplode" Version="6.2.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\w2g.core\w2g.core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Ressources\*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
 
 </Project>

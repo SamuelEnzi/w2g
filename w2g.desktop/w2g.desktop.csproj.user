@@ -13,12 +13,42 @@
     <Compile Update="MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\Mode\Connect.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\Mode\Host.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\Pages\Connect.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\Pages\Host.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\Setup.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="InputWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\Mode\Connect.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\Mode\Host.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\Pages\Connect.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\Pages\Host.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\Setup.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
