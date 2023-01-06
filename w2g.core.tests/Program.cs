@@ -1,5 +1,5 @@
-﻿using w2g.core;
-using w2g.core.Models;
+﻿using w2g.core.standart;
+using w2g.core.standart.Models;
 
 Console.WriteLine("1) server\n2)client");
 var selection = Console.ReadLine();
