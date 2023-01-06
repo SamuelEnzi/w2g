@@ -6,3 +6,7 @@ w2g.core/obj/*
 w2g.core/bin/*
 w2g.core.tests/obj/*
 w2g.core.tests/bin/*
+w2g.core.standart/bin/*
+w2g.core.standart/obj/*
+w2g.ui/obj/*
+w2g.ui/bin/*
