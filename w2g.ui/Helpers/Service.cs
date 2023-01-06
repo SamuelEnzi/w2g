@@ -8,6 +8,7 @@ namespace w2g.ui.Helpers
         public Client client;
         public Server server;
         public ClientState State { get; private set; }
+
         public Service()
         {
 
