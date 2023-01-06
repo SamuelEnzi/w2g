@@ -37,7 +37,7 @@ namespace w2g.ui.ViewModel
                 ContentDialog videoLoadingError = new ContentDialog()
                 {
                     Title = "Video loading error",
-                    Content = "Video could not be loaded... enter a valid url.",
+                    Content = "Video could not be loaded... Enter a valid url.",
                     CloseButtonText = "Ok"
                 };
                 await videoLoadingError.ShowAsync();
