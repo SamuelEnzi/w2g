@@ -68,17 +68,9 @@ namespace w2g.core.standart
             }
         }
 
-        public bool Connect()
+        public void Connect()
         {
-            try
-            {
-                client.Connect(Server, Port);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            client.Connect(Server, Port);
         }
 
         public void RequestCurrent(Models.CurrentModel current)

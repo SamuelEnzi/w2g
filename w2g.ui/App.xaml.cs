@@ -48,7 +48,7 @@ namespace w2g.ui
             if (e.PrelaunchActivated == false)
             {
                 if (rootFrame.Content == null)
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(CreateSessionPage), e.Arguments);
                 Window.Current.Activate();
             }
         }

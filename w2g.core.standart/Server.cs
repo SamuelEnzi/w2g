@@ -56,14 +56,9 @@ namespace w2g.core.standart
             }
         }
 
-        public bool Start()
+        public void Start()
         {
-            try
-            {
-                server.Start(this.Port);
-                return true;
-            }
-            catch { return false; }
+            server.Start(this.Port);
         }
 
         public void SendVideoUrl(Models.UrlModel url)
