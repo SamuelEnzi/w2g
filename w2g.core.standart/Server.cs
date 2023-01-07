@@ -61,7 +61,7 @@ namespace w2g.core.standart
 
         public void Start()
         {
-            server.Start(GetLocalIP(), this.Port);
+            server.Start(this.Port);
         }
 
         private IPAddress GetLocalIP()
