@@ -1,9 +1,15 @@
 ﻿using SimpleTCP;
 using System;
+using System.Diagnostics;
 using System.Net.Sockets;
+using w2g.core.standart;
 using w2g.core.standart.Models;
 using w2g.ui.Types;
+using Windows.ApplicationModel.Core;
+using Windows.Media.Playback;
+using Windows.UI.Core;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace w2g.ui.ViewModel
@@ -13,6 +19,11 @@ namespace w2g.ui.ViewModel
         private Uri videoSource;
         private Helpers.VideoLoader videoLoader = new Helpers.VideoLoader();
         private string pageTitle = "w2g.desktop";
+        private string currentVideo = "";
+        private TimeSpan videoPosition;
+        private TimeSpan loadedPosition;
+        private MediaElement mediaElement;
+        private bool playOnLoad = false;
 
         #region gates
         public Uri VideoSource
@@ -25,15 +36,75 @@ namespace w2g.ui.ViewModel
             get => pageTitle;
             set => SetProperty(ref pageTitle, value);
         }
+        public Visibility SearchBarVisible
+        {
+            get => Helpers.Service.Instance.State == Helpers.ClientState.Host 
+                ? Visibility.Visible : Visibility.Collapsed;
+        }
+        public bool VideoControlsVisible
+        {
+            get => Helpers.Service.Instance.State == Helpers.ClientState.Host;
+        }
+        public TimeSpan VideoPosition
+        {
+            get => videoPosition;
+            set => videoPosition = value;
+        }
+        public bool isServer
+        {
+            get => Helpers.Service.Instance.State == Helpers.ClientState.Host;
+        }
+        public Server Server
+        {
+            get => Helpers.Service.Instance.server;
+        }
+        public Client Client
+        {
+            get => Helpers.Service.Instance.client;
+        }
+        public int Seconds
+        {
+            get => (int)mediaElement.Position.TotalSeconds;
+        }
         #endregion
 
-        public MainPage()
+        public MainPage(MediaElement mediaElement)
         {
+            this.mediaElement = mediaElement;
             LoadVideo("https://music.youtube.com/watch?v=TQTISvU6o2Y");
             SetupListeners();
+            mediaElement.CurrentStateChanged += OnMediaStateChanged;
         }
 
-        public async void LoadVideo(string videoUrl)
+        private void OnMediaStateChanged(object sender, RoutedEventArgs e)
+        {
+            if (!isServer) return;
+            switch (mediaElement.CurrentState)
+            {
+                case Windows.UI.Xaml.Media.MediaElementState.Opening:
+                    Server.SendVideoUrl(new UrlModel
+                    {
+                        Url = currentVideo
+                    });
+                    break;
+                case Windows.UI.Xaml.Media.MediaElementState.Playing:
+                    Server.Stop(new StopModel
+                    {
+                        Seconds = this.Seconds
+                    });
+                    break;
+                case Windows.UI.Xaml.Media.MediaElementState.Paused:
+                    Server.Stop(new StopModel
+                    {
+                        Seconds = this.Seconds
+                    });
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public async void LoadVideo(string videoUrl, int seconds = 0)
         {
             var video = await videoLoader.LoadVideoSource(videoUrl);
             if(video == null) 
@@ -47,10 +118,10 @@ namespace w2g.ui.ViewModel
                 await videoLoadingError.ShowAsync();
                 return;
             }
+            currentVideo = videoUrl;
             VideoSource = video;
+            loadedPosition = TimeSpan.FromSeconds(seconds);
         }
-
-
         private void SetupListeners()
         {
             switch (Helpers.Service.Instance.State)
@@ -86,49 +157,82 @@ namespace w2g.ui.ViewModel
             Helpers.Service.Instance.client.SetTime += OnSetTime;
             Helpers.Service.Instance.client.VideoSet += OnVideoSet;
             Helpers.Service.Instance.client.VideoStop += OnVideoStop;
+
+            Helpers.Service.Instance.client.RequestCurrent(new CurrentModel());
         }
 
         #region host listeners
         private void OnCurrentRequested(object sender, Message e)
         {
-            throw new NotImplementedException();
+            Helpers.Service.Instance.server.Current(new CurrentModel
+            {
+                Url = currentVideo,
+                Seconds = (int)mediaElement.Position.TotalSeconds,
+                Playing = mediaElement.CurrentState == Windows.UI.Xaml.Media.MediaElementState.Playing
+            });
         }
 
         private void OnClientDisconnected(object sender, TcpClient e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void OnClientConnected(object sender, TcpClient e)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
         #endregion
 
         #region client listeners
-        private void OnVideoStop(object sender, StopModel e)
+        private async void OnVideoStop(object sender, StopModel e)
         {
-            throw new NotImplementedException();
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                mediaElement.Position = TimeSpan.FromSeconds(e.Seconds);
+                mediaElement.Stop();
+            });
         }
 
-        private void OnVideoSet(object sender, UrlModel e)
+        private async void OnVideoSet(object sender, UrlModel e)
         {
-            throw new NotImplementedException();
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                LoadVideo(e.Url);
+            });
         }
 
-        private void OnSetTime(object sender, TimeModel e)
+        private async void OnSetTime(object sender, TimeModel e)
         {
-            throw new NotImplementedException();
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                mediaElement.Position = TimeSpan.FromSeconds(e.Seconds);
+            });
         }
 
-        private void OnVideoPlay(object sender, PlayModel e)
+        private async void OnVideoPlay(object sender, PlayModel e)
         {
-            throw new NotImplementedException();
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                mediaElement.Position = TimeSpan.FromSeconds(e.Seconds);
+                mediaElement.Stop();
+            });
         }
 
-        private void OnCurrentSet(object sender, CurrentModel e)
+        private async void OnCurrentSet(object sender, CurrentModel e)
         {
-            throw new NotImplementedException();
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                playOnLoad = e.Playing;
+                LoadVideo(e.Url, (int)e.Seconds);
+            });
+        }
+
+        internal void OnMediaOpend(MediaElement sender)
+        {
+            if (loadedPosition == null) return;
+            sender.Position = loadedPosition;
+            if (playOnLoad)
+                sender.Play();
         }
         #endregion
     }

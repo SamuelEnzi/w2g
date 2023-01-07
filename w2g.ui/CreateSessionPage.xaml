@@ -15,7 +15,7 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="1" VerticalAlignment="Center" >
-            <TextBox x:Name="UI_ServerInput" Margin="3" PlaceholderText="Server ip"></TextBox>
+            <TextBox x:Name="UI_ServerInput" Margin="3" PlaceholderText="Server ip" Text="127.0.0.1"></TextBox>
             <controls:NumberBox x:Name="UI_PortInput" Margin="3" Text="3366"></controls:NumberBox>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Margin="3" Click="OnJoinClicked">Join</Button>

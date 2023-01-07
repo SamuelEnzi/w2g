@@ -32,14 +32,16 @@
                    Margin="28,0,0,0"/>
         </Grid>
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-            <AutoSuggestBox QueryIcon="Find"
+            <AutoSuggestBox Visibility="{Binding Path=SearchBarVisible}" QueryIcon="Find"
                     PlaceholderText="Search"
                     Width="360" Height="32" ItemsSource="{Binding Path=Hints}" QuerySubmitted="OnQuerySubmitted"/>
         </StackPanel>
 
         <Grid Grid.Row="1">
-            <MediaElement Volume="0.1" AutoPlay="False" AreTransportControlsEnabled="True" Source="{Binding Path=VideoSource}">
-
+            <MediaElement x:Name="UI_Media" AutoPlay="False" Position="{Binding Mode=OneWay, Path=VideoPosition}" Volume="0.1" AreTransportControlsEnabled="True" Source="{Binding Path=VideoSource}" MediaOpened="OnMediaOpend">
+                <MediaElement.TransportControls>
+                    <MediaTransportControls IsSeekEnabled="{Binding Path=VideoControlsVisible}" IsCompact="True"/>
+                </MediaElement.TransportControls>
             </MediaElement>
         </Grid>
     </Grid>

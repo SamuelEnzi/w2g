@@ -14,7 +14,12 @@ while(true)
 
 void StartClient()
 {
-    var client = new Client("127.0.0.1", 6061);
+    Console.Write("ip: ");
+    var ip = Console.ReadLine();
+    Console.Write("port: ");
+    var port = int.Parse(Console.ReadLine()!);
+
+    var client = new Client(ip, port);
 
     client.SetCurrent += (s, i) => Display(i);
     client.SetTime += (s, i) => Display(i);
@@ -31,7 +36,7 @@ void StartClient()
 
 void StartServer()
 {
-    var server = new Server();
+    var server = new Server(3366);
 
     server.OnCurrentRequest += (s, i) => Display(i);
 
@@ -43,7 +48,7 @@ void StartServer()
     server.Play(new PlayModel { Seconds = 12 });
     server.Stop(new StopModel { Seconds = 123 });
     server.SendVideoUrl(new UrlModel { Url = "diocae" });
-    server.Current(new CurrentModel { Url = "diocane2", Seconds = 124 });
+    server.Current(new CurrentModel { Url = "https://music.youtube.com/watch?v=lOxI1dcLrJA&list=RDAMVMlOxI1dcLrJA", Seconds = 120, Playing = true });
     server.SetTime(new TimeModel { Seconds = 12345 });
 }
 

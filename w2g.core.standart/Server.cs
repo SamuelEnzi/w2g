@@ -1,5 +1,6 @@
 ﻿using SimpleTCP;
 using System;
+using System.Net;
 using System.Net.Sockets;
 using w2g.core.standart.Models.Base;
 
@@ -24,8 +25,10 @@ namespace w2g.core.standart
         private void Setup()
         {
             server.Delimiter = 0x13;
-            server.ClientConnected += (sender, tcpClient) => ClientConnected?.Invoke(this, tcpClient);
-            server.ClientDisconnected += (sender, tcpClient) => ClientDisconnected?.Invoke(this, tcpClient);
+            server.ClientConnected += (sender, tcpClient) => 
+                ClientConnected?.Invoke(this, tcpClient);
+            server.ClientDisconnected += (sender, tcpClient) => 
+                ClientDisconnected?.Invoke(this, tcpClient);
             server.DelimiterDataReceived += ParseData;
             server.StringEncoder = System.Text.ASCIIEncoding.ASCII;
         }
@@ -58,7 +61,16 @@ namespace w2g.core.standart
 
         public void Start()
         {
-            server.Start(this.Port);
+            server.Start(GetLocalIP(), this.Port);
+        }
+
+        private IPAddress GetLocalIP()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    return ip;
+            return null;
         }
 
         public void SendVideoUrl(Models.UrlModel url)

@@ -1,5 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 
 namespace w2g.ui.Types
 {
@@ -13,7 +16,12 @@ namespace w2g.ui.Types
             OnPropertyChanged(propertyName);
         }
 
-        protected void OnPropertyChanged([CallerMemberName] string name = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        protected async void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            });
+        }
     }
 }
