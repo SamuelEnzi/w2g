@@ -10,3 +10,5 @@ w2g.core.standart/bin/*
 w2g.core.standart/obj/*
 w2g.ui/obj/*
 w2g.ui/bin/*
+w2g.ui/AppPackages/*
+w2g.ui/BundleArtifacts/*
